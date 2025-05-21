@@ -5,9 +5,22 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Terraform action to perform'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - init
+          - plan
+          - apply
+          - destroy
+
 jobs:
   terraform:
-    name: 'Terraform Apply'
+    name: 'Terraform Workflow'
     runs-on: ubuntu-latest
 
     steps:
@@ -27,10 +40,17 @@ jobs:
         aws-region: us-east-1
 
     - name: Terraform Init
+      if: ${{ github.event.inputs.action == 'init' || github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply' || github.event.inputs.action == 'destroy' }}
       run: terraform init
 
     - name: Terraform Plan
+      if: ${{ github.event.inputs.action == 'plan' }}
       run: terraform plan
 
     - name: Terraform Apply
+      if: ${{ github.event.inputs.action == 'apply' }}
       run: terraform apply -auto-approve
+
+    - name: Terraform Destroy
+      if: ${{ github.event.inputs.action == 'destroy' }}
+      run: terraform destroy -auto-approve
