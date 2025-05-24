@@ -6,11 +6,11 @@ variable "ami_name_pattern" {
 
 data "aws_ami" "org_ami" {
   most_recent = true
-  owners      = ["self"] # or your AWS Account ID
+  owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = [var.ami_name_pattern]
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
 }
 
