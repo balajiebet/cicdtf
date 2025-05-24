@@ -8,3 +8,7 @@ module "ec2" {
   main_subnet_id = module.vpc.main_subnet_id
   main_sg_id     = module.vpc.main_sg_id
 }
+
+module "iam" {
+  source = "./iam"
+}
